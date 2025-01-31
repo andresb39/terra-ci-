@@ -1,0 +1,17 @@
+name: "Terraform CI/CD"
+description: "Running Terraform commands (fmt, init, plan, apply, validate)"
+
+inputs:
+  arg:
+    description: "Arguments to used with Terraform"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check Pre-requirements
+      run: ${{ github.action_path }}/cmd/pre-requirements.sh
+      shell: bash
+    - name: Terraform ${{ inputs.arg }}
+      run: ${{ github.action_path }}/cmd/terraform.sh ${{ inputs.arg }}
+      shell: bash
