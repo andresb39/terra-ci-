@@ -1,5 +1,9 @@
 name: "Terraform CI/CD"
 description: "Running Terraform commands (fmt, init, plan, apply, validate)"
+author: "@andresb39"
+branding:
+  icon: "check-circle"
+  color: "blue"
 
 inputs:
   arg:

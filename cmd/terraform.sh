@@ -1,7 +1,7 @@
 #!/bin/bash -l
 # Author: @andresb39, @AnthonyMYCD, @YesMCD
 # Company: myCloudDoor
-# Date: June 2024
+# Date: January 2025
 #
 # Description:
 #   This script is designed to be used in GitHub Actions workflows for managing Terraform operations.
