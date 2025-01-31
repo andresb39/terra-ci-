@@ -59,7 +59,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Terraform
-        uses: ./ # Reference the action in this repository
+        uses: andresb39/tf-orchestrator@v1
         with:
           arg: plan
 ```
