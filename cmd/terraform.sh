@@ -1,35 +1,26 @@
 #!/bin/bash -l
+
 # Author: @andresb39, @AnthonyMYCD, @YesMCD
 # Company: myCloudDoor
 # Date: January 2025
 #
 # Description:
-#   This script is designed to be used in GitHub Actions workflows for managing Terraform operations.
-#   It performs various Terraform commands such as fmt, init, validate, plan, and apply in directories
-#   where Terraform files have been modified. Additionally, it handles commenting on pull requests with the results of Terraform plan executions.
-#
-# Features:
-# 	- Checks for necessary prerequisites (terraform, tfenv, jq) and exits if not found.
-# 	- Validates the environment to ensure required GitHub environment variables are set.
-# 	- Identifies modified directories based on the changes in the current Git commit.
-# 	- Executes specified Terraform commands (fmt, init, validate, plan, apply) in modified directories.
-# 	- For pull requests, it posts the output of Terraform plan as a comment on the PR.
-# 	- Deletes existing plan comments before posting new ones to keep the PR clean and up-to-date.
+#   This script is used in GitHub Actions workflows to manage Terraform operations.
+#   It executes Terraform commands such as fmt, init, validate, plan, and apply
+#   in directories where Terraform files have been modified. Additionally, it handles
+#   commenting on pull requests with the results of Terraform plan executions.
 #
 # Usage:
-#   ./script.sh {fmt|init|validate|plan|apply}
+#   ./terraform.sh {fmt|init|validate|plan|apply}
 #
 # Environment Variables:
-# 	- GITHUB_EVENT_PATH: Path to the GitHub event payload.
-# 	- GITHUB_TOKEN: GitHub token for authentication and API access.
-# 	- EXPAND_SUMMARY_DETAILS (optional): Whether to expand the summary details in the PR comment (default: true).
-# 	- HIGHLIGHT_CHANGES (optional): Whether to highlight changes in the plan output (default: true).
+#   - GITHUB_EVENT_PATH: Path to the GitHub event payload.
+#   - GITHUB_TOKEN: GitHub token for authentication and API access.
 #
 # Example:
-#   ./script.sh plan
+#   ./terraform.sh plan
 #
-# This script ensures a smooth and automated Terraform workflow in CI/CD pipelines, helping to manage
-# infrastructure as code efficiently and effectively.
+# This script ensures a streamlined and automated Terraform workflow within CI/CD pipelines.
 
 set -euo pipefail
 
@@ -51,6 +42,17 @@ info() {
 # Helper function to print error messages
 error() {
 	echo -e "${ERROR_COLOR}ERROR:${RESET_COLOR} $1" >&2
+}
+
+check_prerequisites() {
+	terraform --version >/dev/null || {
+		info "Terraform is not installed"
+		exit 1
+	}
+	tfenv list >/dev/null || {
+		info "tfenv is not installed"
+		exit 1
+	}
 }
 
 # Function to validate PR environment
@@ -215,6 +217,7 @@ post_pr_comment_if_plan_exists() {
 
 # Main function to handle command line arguments
 main() {
+	check_prerequisites
 	validate_pr_environment
 
 	local current_branch

@@ -1,5 +1,5 @@
-name: "Terraform CI/CD"
-description: "Running Terraform commands (fmt, init, plan, apply, validate)"
+name: "Terraform Orchestrator"
+description: "Automate Terraform workflows in GitHub Actions, including init, plan, apply, and validation."
 author: "@andresb39"
 branding:
   icon: "check-circle"
@@ -7,15 +7,15 @@ branding:
 
 inputs:
   arg:
-    description: "Arguments to used with Terraform"
+    description: "Arguments to be used with Terraform"
     required: true
 
 runs:
   using: "composite"
   steps:
     - name: Check Pre-requirements
-      run: ${{ github.action_path }}/cmd/pre-requirements.sh
+      run: bash ${{ github.action_path }}/cmd/pre-requirements.sh
       shell: bash
     - name: Terraform ${{ inputs.arg }}
-      run: ${{ github.action_path }}/cmd/terraform.sh ${{ inputs.arg }}
+      run: bash ${{ github.action_path }}/cmd/terraform.sh ${{ inputs.arg }}
       shell: bash
